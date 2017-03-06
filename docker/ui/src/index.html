@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Autoscience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="autoscience: your data robot">
+
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="components/octicons/build/font/octicons.min.css" />
+
+    <!--<link rel="stylesheet" href="components/datatables.net-bs/css/dataTables.bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="components/angular-datatables/dist/css/angular-datatables.css">-->
+
+    <link rel="stylesheet" href="components/c3/c3.min.css">
+    <link rel="stylesheet" href="assets/styles/css/main.css">
+
+  </head>
+  <body ng-app="autoscienceApp">
+   <header class="navbar navbar-light bd-navbar">
+    <div class="container">
+      <nav>
+        <div class="clearfix">
+          <button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            ☰
+          </button>
+          <a class="btn btn-info pull-xs-left text-uppercase font-weight-bold hidden-md-up" href="#/">
+            Autoscience
+          </a>
+        </div>
+        <div class="collapse navbar-toggleable-sm" id="bd-main-nav">
+          <ul class="nav navbar-nav">
+            <li class="nav-item active">
+              <a class="btn btn-info pull-xs-left text-uppercase font-weight-bold hidden-sm-down" href="#/">
+                Autoscience
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link " href="/#/about">about</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link" href="/#/team">team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link" href="/#/blog">blog</a>
+            </li>
+            <li class="nav-item pull-md-right">
+              <a class="nav-item nav-link " href="https://github.com/natbusa/autoscience"><span class="octicon octicon-mark-github"></span></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+    <div class="container">
+      <div ng-view></div>
+    </div>
+
+    <div class="footer">
+      <div class="container">
+        <hr>
+        <span class="octicon octicon-pencil"></span> with <span class="octicon octicon-heart"></span> by Natalino Busa
+        <img class="pull-xs-right" src="assets/images/license-apache%202.0-orange.svg" alt="apache 2.0 in orange">
+      </div>
+    </div>
+
+  <!--<script src="components/jquery/dist/jquery.min.js"></script>-->
+  <!--<script src="components/datatables.net/js/jquery.dataTables.min.js"></script>-->
+
+  <script src="components/angular/angular.min.js"></script>
+
+  <!--<script src="components/angular-animate/angular-animate.min.js"></script>-->
+  <!--<script src="components/angular-aria/angular-aria.min.js"></script>-->
+  <!--<script src="components/angular-cookies/angular-cookies.min.js"></script>-->
+  <!--<script src="components/angular-messages/angular-messages.min.js"></script>-->
+  <script src="components/angular-resource/angular-resource.min.js"></script>
+  <script src="components/angular-route/angular-route.min.js"></script>
+  <!--<script src="components/angular-sanitize/angular-sanitize.min.js"></script>-->
+  <!--<script src="components/angular-touch/angular-touch.min.js"></script>-->
+
+  <!--<script src="components/tether/dist/js/tether.min.js"></script>-->
+  <!--<script src="components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+
+  <!--<script src="components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>-->
+  <!--<script src="components/angular-datatables/dist/angular-datatables.min.js"></script>-->
+
+  <!--<script src="components/d3/d3.min.js"></script>-->
+  <!--<script src="components/c3/c3.min.js"></script>-->
+  <!--<script src="components/angular-c3-simple/dist/angular_c3_simple.min.js"></script>-->
+
+  <script src="app/app.js"></script>
+  <script src="app/constants.js"></script>
+
+  <script src="app/components/project/project.config.js"></script>
+  <script src="app/components/project/project.controllers.js"></script>
+  <script src="app/components/project/project.services.js"></script>
+
+  <!--<script src="app/controllers/main.js"></script>-->
+  <!--<script src="app/controllers/dataset.js"></script>-->
+  <!--<script src="app/controllers/clustering.js"></script>-->
+  <!--<script src="app/controllers/variable.js"></script>-->
+
+  <!--<script src="app/controllers/about.js"></script>-->
+
+</body>
+</html>

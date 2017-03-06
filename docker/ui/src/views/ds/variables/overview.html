@@ -1,0 +1,149 @@
+<div class="row m-t-1">
+  <div class="col-md-7 offset-md-2">
+    <h3>{{d.ds.name}}</h3>
+    <p class="small">
+      filename: <a href="http://data.autoscience.io/{{ds.id}}">{{d.ds.file.name}}</a><br/>
+      filepath: {{d.ds.file.path}} | size: {{d.ds.file.size}} <br/>
+      encoding: {{d.ds.file.encoding.encoding}}, confidence {{d.ds.file.encoding.confidence}}
+    </p>
+  </div>
+  <div class="col-md-3">
+    <p class="small">
+      kernel status: <span class="tag tag-success">running</span> <br/>
+      <a href="http://autoscience.io/1/kernel">http://autoscience.io/1/kernel</a><br/>
+      started on: 2016-08-28T20:57:31+00:00<br/>
+      memory: 6.2 GB | CPU: 2 v-cores
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 offset-md-2">
+
+    <div class="row">
+      <div class="col-md-12">
+        <h4>{{ d.var.name }}</h4>
+        <p class="small">{{ d.var.sample.join(' ') }}</p>
+      </div>
+
+      <div class="col-md-12">
+        <h7>Type extraction</h7>
+        <table class="table table-sm">
+
+          <thead>
+          <tr>
+            <th>name</th>
+            <th>cat</th>
+            <th>valid</th>
+            <th>int</th>
+            <th>num</th>
+            <th>str</th>
+            <th>unique</th>
+            <th>na</th>
+          </tr>
+          </thead>
+
+          <tr>
+            <td>{{ d.var.alias }}</td>
+            <td>{{ d.var.type.cat }}</td>
+            <td>{{ d.var.type.valid }}</td>
+            <td>{{ d.var.type.integer }}</td>
+            <td>{{ d.var.type.numeric }}</td>
+            <td>{{ d.var.type.string }}</td>
+            <td>{{ d.var.type.unique }}</td>
+            <td>{{ d.var.type.nan }}</td>
+          </tr>
+        </table>
+        <p> Detected type: <b>{{d.var.type.tcoerce}}</b>, type purity: {{d.var.type.tpurity}}<br/>
+          <span ng-show="d.var.type.cat">This variable is <b>Categorical</b> with {{ d.var.type.unique }} categories found.</span>
+        </p>
+      </div>
+
+      <div ng-hide="d.var.type.cat" class="col-md-12">
+        <h7 >Descriptive statistics</h7>
+
+        <table class="table table-sm">
+
+          <thead>
+          <tr>
+            <th>name</th>
+            <th>min</th>
+            <th>whisker lo</th>
+            <th>25%</th>
+            <th>50%</th>
+            <th>75%</th>
+            <th>whisker hi</th>
+            <th>max</th>
+
+          </tr>
+          </thead>
+
+          <tr>
+            <td>{{ d.var.alias }}</td>
+            <td>{{ d.var.stats.min }}</td>
+            <td>{{ d.var.stats.whiskers.lo }}</td>
+            <td>{{ d.var.stats.q25 }}</td>
+            <td>{{ d.var.stats.q50 }}</td>
+            <td>{{ d.var.stats.q75 }}</td>
+            <td>{{ d.var.stats.whiskers.hi }}</td>
+            <td>{{ d.var.stats.max }}</td>
+          </tr>
+        </table>
+        <table class="table table-sm">
+
+          <thead>
+          <tr>
+            <th>name</th>
+            <th>iqr</th>
+            <th>count</th>
+            <th>#anomalies lo</th>
+            <th>#anomalies hi</th>
+            <th>na</th>
+            <th>sd</th>
+
+          </tr>
+          </thead>
+
+          <tr>
+            <td>{{ d.var.alias }}</td>
+            <td>{{ d.var.stats.iqr }}</td>
+            <td>{{ d.var.stats.count }}</td>
+            <td>{{ d.var.stats.anomalies.lo }}</td>
+            <td>{{ d.var.stats.anomalies.hi }}</td>
+            <td>{{ d.var.type.nan }}</td>
+            <td>{{ d.var.stats.std }}</td>
+          </tr>
+        </table>
+      </div>
+      <div ng-show="d.var.type.cat" class="col-md-12">
+        <h7 >Descriptive statistics</h7>
+
+        <p class="small"> {{ d.var.stats.categories.join(' ') }}</p>
+        <table class="table table-sm">
+
+          <thead>
+          <tr>
+            <th>factor</th>
+            <th>count</th>
+            <th>%</th>
+          </tr>
+          </thead>
+
+          <tr ng-repeat="i in d.var.stats.histogram">
+            <td>{{ i.v }}</td>
+            <td>{{ i.c }}</td>
+            <td>{{ i.p }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+  <c3-simple id="chartc3" config="chartc3"></c3-simple>
+
+
+    <img data-ng-src="data:image/png;base64,{{chart[1]}}" class="img-fluid"/>
+    <img ng-show="boxplot" data-ng-src="data:image/png;base64,{{chart[2]}}" class="img-fluid"/>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="row m-t-1">
+  <div class="col-md-7 offset-md-2">
+  <h3>{{d.ds.name}}</h3>
+  <p class="small">
+  filename: <a href="http://data.autoscience.io/{{d.ds.id}}">{{d.ds.file.name}}</a><br/>
+  filepath: {{d.ds.file.path}} | size: {{d.ds.file.size}} <br/>
+  encoding: {{d.ds.file.encoding.encoding}}, confidence: {{d.ds.file.encoding.confidence}}
+  </p>
+  </div>
+  <div class="col-md-3">
+    <p class="small">
+    kernel status:     <span class="tag tag-success">running</span> <br/>
+    <a href="http://autoscience.io/1/kernel">http://autoscience.io/1/kernel</a><br/>
+    started on: 2016-08-28T20:57:31+00:00<br/>
+    memory:     6.2 GB | CPU: 2 v-cores
+    </p>
+
+    <div>
+      <a href="#/ds/{{d.ds.id}}/clustering"><button type="button" class="btn btn-primary">Auto Clustering</button></a>
+    </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9 offset-md-2">
+  <p class="small">{{d.ds.rows}} obs. of  {{d.ds.cols}} variables <br/>
+    NA rows:{{d.ds.na.rows}}, columns:{{d.ds.na.cols}}</p>
+  </div>
+</div>
+
+<div class="row">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#table" role="tab" target="_self">Table</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#cards" role="tab" target="_self">Cards</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="table" role="tabpanel">
+      <div class="row">
+        <table datatable="ng" class="table table-sm compact hover">
+          <thead>
+            <tr>
+              <th>variable</th>
+              <th>samples</th>
+              <th>vtype</th>
+              <th>dtype</th>
+              <th>unique</th>
+              <th>na</th>
+              <th>valid</th>
+              <th>quality</th>
+            </tr>
+          </thead>
+          <tr ng-repeat="v in d.vars">
+            <td><a href="#/ds/{{d.ds.id}}/variables/{{v.id}}">{{v.name}}</a></td>
+            <td class="small">{{ v.sample.toString() }}</td>
+            <td>{{v.type.vtype}}</td>
+            <td>{{v.type.tcoerce}}</td>
+            <td>{{v.type.unique}}</td>
+            <td>{{v.type.nan}}</td>
+            <td>{{v.type.valid}}</td>
+            <td>{{v.type.quality}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane" id="cards" role="tabpanel">
+      <div class="row">
+        <div class="card col-md-3" ng-repeat="v in d.vars">
+          <div class="card-img-top" width="80%" height="150px">
+            <c3chart bindto-id="chartGroupDataPoints{{v.id}}"
+                     chart-data="chartdata[]"
+                     chart-columns="chartcolumns"
+                     chart-x="chartx">
+              <chart-bar height="100px" />
+              <chart-axes values-x="x"/>
+            </c3chart>
+            <a href="#/ds/{{d.ds.id}}/variables/{{v.id}}">
+              <img data-ng-src="data:image/png;base64,{{chartimg[v.id]}}" class="img-fluid"/>
+            </a>
+          </div>
+          <div class="card-block">
+            <p class="small card-text">
+              {{v.alias}}: {{v.type.vtype}}, {{v.type.tcoerce}}<br/>
+              quality: {{v.type.quality}}, valid: {{v.type.valid}}, unique: {{v.type.unique}}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

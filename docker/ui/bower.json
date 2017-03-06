@@ -1,0 +1,42 @@
+{
+  "name": "autoscience",
+  "version": "0.0.0",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.3",
+    "octicons": "^4.3.0",
+    "d3": "latest",
+    "c3": "latest",
+    "angular": "^1.5.0",
+    "angular-animate": "^1.5.0",
+    "angular-aria": "^1.5.0",
+    "angular-cookies": "^1.5.0",
+    "angular-messages": "^1.5.0",
+    "angular-resource": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-sanitize": "^1.5.0",
+    "angular-touch": "^1.5.0",
+    "angular-datatables": "^0.5.5",
+    "angular-c3-simple": "latest",
+    "datatables.net": "latest",
+    "datatables.net-bs": "latest"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.0"
+  },
+  "appPath": "src/app",
+  "moduleName": "autoscienceApp",
+  "homepage": "https://github.com/natbusa/autoscience",
+  "authors": [
+    "natalinobusa <natalino.busa@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

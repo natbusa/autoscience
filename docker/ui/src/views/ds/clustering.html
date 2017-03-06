@@ -1,0 +1,60 @@
+<div class="row m-t-1">
+  <div class="col-md-7 offset-md-2">
+  <h3>{{d.ds.name}}</h3>
+  <p class="small">
+  filename: <a href="http://data.autoscience.io/{{d.ds.id}}">{{d.ds.file.name}}</a><br/>
+  filepath: {{d.ds.file.path}} | size: {{d.ds.file.size}} <br/>
+  encoding: {{d.ds.file.encoding.encoding}}, confidence: {{d.ds.file.encoding.confidence}}
+  </p>
+  </div>
+  <div class="col-md-3">
+    <p class="small">
+    kernel status:     <span class="tag tag-success">running</span> <br/>
+    <a href="http://autoscience.io/1/kernel">http://autoscience.io/1/kernel</a><br/>
+    started on: 2016-08-28T20:57:31+00:00<br/>
+    memory:     6.2 GB | CPU: 2 v-cores
+    </p>
+  </div>
+</div>
+
+<div class="row col-md-10 offset-md-2">
+  <div class="alert alert-info alert-dismissible fade in" role="alert">
+    <strong>Processing!</strong> please wait while we cluster your data
+  </div>
+</div>
+
+<div class="row">
+  <ul class="nav nav-tabs col-md-10 offset-md-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#clustermap" role="tab" target="_self">Cluster map</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#decisiontree" role="tab" target="_self">Decision Tree</a>
+    </li>
+  </ul>
+
+  <div class="tab-content col-md-10 offset-md-2">
+    <div class="tab-pane active" id="clustermap" role="tabpanel">
+      <img data-ng-src="data:image/png;base64,{{chart[1]}}" class="img-fluid"/>
+    </div>
+    <div class="tab-pane" id="decisiontree" role="tabpanel">
+      <img data-ng-src="data:image/png;base64,{{chart[2]}}" class="img-fluid"/>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 offset-md-2">
+    <table class="table table-sm">
+      <thead>
+      <tr>
+        <th>cluster id</th>
+        <th >samples</th>
+      </tr>
+      </thead>
+      <tr ng-repeat="v in c">
+        <td>{{v.cl}}</td>
+        <td>{{v.count}}</td>
+      </tr>
+  </div>
+</div>

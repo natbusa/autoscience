@@ -1,0 +1,37 @@
+<div class="row m-t-3">
+
+ <div class="col-md-6 offset-md-3">
+    <label for="datasetupload">Upload dataset</label>
+    <div class="input-group">
+      <input type="file" class="form-control" placeholder="Upload dataset" id="datasetupload">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button">Go!</button>
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+ <div class="col-md-6 offset-md-3 m-t-2">
+    <p class="text-xs-center">
+
+    ... or choose one here below:</p>
+  </div>
+</div>
+
+<div class="row">
+ <div class="col-md-6 offset-md-3 m-t-2">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>name</th>
+          <th class="text-xs-right">superpower</th>
+        </tr>
+      </thead>
+      <tr ng-repeat="ds in datasets">>
+        <td><a href="#/ds/{{ds.id}}/overview">{{ds.filename}}</a></td>
+        <td class="text-xs-right"> {{ds.desc}} </td>
+      </tr>
+    </table>
+</div>

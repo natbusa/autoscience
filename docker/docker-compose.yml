@@ -1,0 +1,22 @@
+version: '2'
+services:
+  proxy:
+    build: proxy
+    ports:
+      - "80:80"
+
+  hello:
+    build: hello
+
+  api-rs:
+    build: api-rs
+
+#  api-ds:
+#    build: api-ds
+
+  ui:
+    build: ui
+
+#  cassandra:
+#    image: cassandra
+#
