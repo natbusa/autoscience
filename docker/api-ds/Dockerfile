@@ -32,17 +32,18 @@ ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
 # add some extra packages
-ADD requirements.yml /srv/
-RUN pip install -r /srv/requirements.yml
+ADD requirements.yml /application/
+RUN pip install -r /application/requirements.yml
 
 # install the kernel gateway
 RUN pip install jupyter_kernel_gateway
 ENV JUPYTER_GATEWAY=1
 
 # REST API is designed as notebooks
-ADD notebooks /srv/notebooks
+ADD notebooks /application/notebooks
+WORKDIR /application
 
-# expose kernel gateway 
+# expose kernel gateway
 EXPOSE 8888
 
-CMD ["jupyter", "kernelgateway", "--KernelGatewayApp.ip=0.0.0.0", "--KernelGatewayApp.port=8888", "--KernelGatewayApp.api=notebook-http","--KernelGatewayApp.seed_uri=/srv/notebooks/restapi.ipynb"]
+CMD ["jupyter", "kernelgateway", "--KernelGatewayApp.ip=0.0.0.0", "--KernelGatewayApp.port=8888", "--KernelGatewayApp.api=notebook-http","--KernelGatewayApp.seed_uri=/application/notebooks/restapi.ipynb"]

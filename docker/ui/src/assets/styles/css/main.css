@@ -1,0 +1,13 @@
+/* line 1, ../scss/main.scss */
+header {
+  border-bottom: 1px #ddd solid;
+}
+
+/* line 5, ../scss/main.scss */
+footer {
+  border-top: 1px #ddd solid;
+}
+
+
+table thead th { border-top: 0px none !important; }
+table tr:first-child td { border-top: 0px none !important; }

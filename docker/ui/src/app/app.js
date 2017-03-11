@@ -19,9 +19,7 @@ var app= angular.module('autoscienceApp', [
 app.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'views/main.html',
-      controller: 'mainCtrl',
-      controllerAs: 'main'
+      templateUrl: 'views/main.html'
     })
     .when('/about', {
       templateUrl: 'views/about.html',

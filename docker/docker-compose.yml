@@ -10,12 +10,16 @@ services:
 
   api-rs:
     build: api-rs
+    volumes:
+      - ./api-rs/app:/application
 
 #  api-ds:
 #    build: api-ds
 
   ui:
     build: ui
+    volumes:
+      - ./ui/src:/application/src
 
 #  cassandra:
 #    image: cassandra

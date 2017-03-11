@@ -7,6 +7,6 @@ app.constant('AUTH_EVENTS', {
   notAuthorized: 'auth-not-authorized'
 });
 
-app.constant('RESOURCE_API', {
-  url: 'http://localhost:/api/rs'
+app.constant('RESOURCES_API', {
+  url: 'http://localhost/api/rs'
 });

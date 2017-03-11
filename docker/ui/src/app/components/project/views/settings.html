@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2" ng-include="'app/components/project/views/sidebar.html'"></div>
+    <div class="col-10">
+      <div class="card">
+        <div class="card-header">
+          Project name and description
+        </div>
+        <div class="card-block">
+          <form class="form-horizontal" role="form">
+            <div ng-include="'app/components/project/views/form.html'"></div>
+          </form>
+          <div class="text-right">
+            <a href class="btn btn-primary" ng-click="update()">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          Danger zone
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="mr-auto">Delete the whole project. This action cannot be reverted.</span>
+            <button type="button" href ng-click="delete()" class="btn btn-sm btn-danger">Delete Project</button>
+          </li>
+          <li class="list-group-item">
+            <span class="mr-auto">Reset all step. This action will remove all the results so far.</span>
+            <button type="button" href ng-click="reset()" class="btn btn-sm btn-danger">Reset Project</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

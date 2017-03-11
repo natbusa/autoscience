@@ -4,8 +4,8 @@ from datetime import datetime
 
 DATABASE = {
   '0': {
-    'title': 'Iris',
-    'desc':  'all those beautiful flowers',
+    'title': 'build a pca model',
+    'desc':  ' pca models are great to determine which varables influence most',
     'created': datetime(2007, 12, 6, 15, 29).timestamp(),
     'modified': datetime(2007, 12, 9, 18, 45).timestamp()
   }
@@ -30,7 +30,7 @@ def abort_if_project_doesnt_exist(id):
 # see http://jsonapi.org/
 
 def jsonapi_item(id):
-  return {'id': id, 'type': 'projects', 'attributes': DATABASE[id]}
+  return {'id': id, 'type': 'ideas', 'attributes': DATABASE[id]}
 
 def jsonapi_list(filter=''):
   items = [  jsonapi_item(k) for k in DATABASE.keys() ]

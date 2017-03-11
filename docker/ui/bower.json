@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "Apache 2.0",
   "dependencies": {
-    "bootstrap": "v4.0.0-alpha.3",
-    "octicons": "^4.3.0",
+    "bootstrap": "v4.0.0-alpha.6",
+    "octicons":  "^4.3.0",
     "d3": "latest",
     "c3": "latest",
     "angular": "^1.5.0",
