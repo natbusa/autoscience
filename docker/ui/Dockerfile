@@ -15,22 +15,22 @@ RUN /usr/local/rvm/bin/rvm 2.4.0 do gem install --conservative --no-rdoc --no-ri
 ENV PATH=/usr/local/rvm/gems/ruby-2.4.0/wrappers:$PATH
 
 # Bundle app source
-RUN mkdir /application
+RUN mkdir -p /srv
 
 # copy bower and npm install and config files
-COPY bower.json /application
-COPY package.json /application
-COPY Gruntfile.js /application
+COPY bower.json /srv
+COPY package.json /srv
+COPY Gruntfile.js /srv
 
 # install http-server
 RUN npm install -g http-server
 
 # Define working directory.
-WORKDIR /application
+WORKDIR /srv
 RUN npm install
 
 # copy web app specific data
-COPY src /application/src
+COPY src /srv/src
 
 #runs the app using nodejs http-server
 EXPOSE 8000

@@ -2,47 +2,12 @@
   <div class="row">
     <div class="offset-3 col-6">
 
-      <div class="card" ng-show="setup">
-        <div class="card-block row">
-          <div class="col-8">
-            djnkdsajnsdjnsf dsjlsj dsjn sadkjn ds jkfdsjk dsfjn dfsjndfsjn kfsjnk fsjkn fdsjnk  jnkf
-          </div>
-          <div class="card-block col-4">
-            <a href class="btn btn-success float-right" ng-click="select(true)">Let's start!</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card mt-2" ng-show="setup">
-        <div class="card-block row">
-          <div class="col-8">
-            djnkdsajnsdjnsf dsjlsj dsjn sadkjn ds jkfdsjk dsfjn dfsjndfsjn kfsjnk fsjkn fdsjnk  jnkf
-          </div>
-          <div class="card-block col-4">
-            <a href class="btn btn-success float-right" ng-click="select(false)">Let's start!</a>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="card" ng-show="upload_form">
+     <div class="card">
         <div class="card-header">
-          Project details (upload)
+          Project details
         </div>
         <div class="card-block">
-          <form class="form-horizontal" role="form">
             <div ng-include="'app/components/project/views/form.html'"></div>
-
-
-            <div>
-              <label for="desc" class="control-label">Dataset</label>
-              <label class="custom-file col-12">
-                <input type="file" id="file" class="custom-file-input">
-                <span class="custom-file-control"></span>
-              </label>
-            </div>
-
-          </form>
         </div>
 
         <div class="card-block text-right">
@@ -51,34 +16,6 @@
         </div>
 
       </div>
-
-      <div class="card" ng-show="preset_form">
-        <div class="card-header">
-          Project details (preset)
-        </div>
-        <div class="card-block">
-          <form class="form-horizontal" role="form">
-            <div ng-include="'app/components/project/views/form.html'"></div>
-
-
-            <div>
-              <label for="desc" class="control-label">Dataset</label>
-              <label class="custom-file col-12">
-                <input type="file" id="file" class="custom-file-input">
-                <span class="custom-file-control"></span>
-              </label>
-            </div>
-
-          </form>
-        </div>
-
-        <div class="card-block text-right">
-          <a href class="btn btn-primary" ng-click="create()">Let's start!</a>
-          <a href="#!/projects" class="btn btn-secondary">Cancel</a>
-        </div>
-
-      </div>
-
 
     </div>
   </div>

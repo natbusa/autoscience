@@ -7,8 +7,10 @@ app.controller('ProjectListController',function($scope,$location,Project){
 
 app.controller('ProjectController',function($scope,$routeParams,$location,Project){
 
+    $scope.pid = $routeParams.pid;
+
     $scope.d=Project.get(
-      {id:$routeParams.id},
+      {id:$routeParams.pid},
       function(){},
       function(){
         $location.path('/projects');
@@ -16,13 +18,13 @@ app.controller('ProjectController',function($scope,$routeParams,$location,Projec
     );
 
     $scope.delete=function(){
-      $scope.d.$delete({id:$routeParams.id},function(){
+      $scope.d.$delete({id:$routeParams.pid},function(){
           $location.path('/projects');
       });
     };
 
     $scope.update=function(){
-      $scope.d.$update({id:$routeParams.id}, function(){
+      $scope.d.$update({id:$routeParams.pid}, function(){
           $location.path('/projects');
       });
     };
@@ -30,25 +32,68 @@ app.controller('ProjectController',function($scope,$routeParams,$location,Projec
 
 app.controller('ProjectCreateController',function($scope,$location,$routeParams,Project){
 
-    $scope.setup = true;
-    $scope.upload_form = false;
-    $scope.preset_form = false;
-
-
     $scope.d=new Project();
     $scope.d.data = {type:'projects'};
 
     $scope.create=function(){
         $scope.d.$save(function(){
-            $location.path('/projects');
+            $location.path('/projects/'+$scope.d.data.id);
         });
+    };
+});
+
+app.controller('SourceSetupController',function($scope,$location,$routeParams,Project){
+
+    $scope.pid = $routeParams.pid;
+
+    $scope.d=Project.get(
+      {id:$routeParams.pid},
+      function(){
+        $scope.loading = false;
+        $scope.setup   = true;
+      }
+    );
+
+    $scope.start=function(){
+      $scope.setup = false;
+      $scope.select = true;
     };
 
     $scope.datasets=Project.query();
-    $scope.select = function(option){
-       $scope.setup  =false
-       $scope.upload_form = option;
-       $scope.preset_form = ! option;
+    $scope.select_dataset = function(option){
+
     };
 
+    $scope.update=function(){
+      $scope.d.$update({id:$routeParams.pid}, function(){
+        $location.path('/projects'+$scope.d.data.id);
+      });
+    };
+});
+
+app.controller('SourceController',function($scope,$location,$routeParams,Project){
+
+    $scope.pid = $routeParams.pid;
+
+    $scope.d=Project.get(
+      {id:$routeParams.pid},
+      function(){
+      }
+    );
+
+    $scope.start=function(){
+      $scope.setup = false;
+      $scope.select = true;
+    };
+
+    $scope.datasets=Project.query();
+    $scope.select_dataset = function(option){
+
+    };
+
+    $scope.update=function(){
+      $scope.d.$update({id:$routeParams.pid}, function(){
+        $location.path('/projects'+$scope.d.data.id);
+      });
+    };
 });

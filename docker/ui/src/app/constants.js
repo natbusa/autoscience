@@ -10,3 +10,7 @@ app.constant('AUTH_EVENTS', {
 app.constant('RESOURCES_API', {
   url: 'http://localhost/api/rs'
 });
+
+app.constant('DATA_API', {
+  url: 'http://localhost/api/data'
+});

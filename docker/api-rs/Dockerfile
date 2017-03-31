@@ -1,10 +1,10 @@
 FROM python:latest
 
-COPY requirements.yml /
-RUN pip install -r requirements.yml
+COPY requirements.txt /
+RUN pip install -r requirements.txt
 
-COPY app /application
-WORKDIR  /application
+COPY app /srv
+WORKDIR  /srv
 
 ENTRYPOINT ["python"]
 CMD ["app.py"]

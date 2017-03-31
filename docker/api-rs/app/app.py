@@ -36,5 +36,9 @@ from resources import projects
 api.add_resource(projects.List, '/projects', endpoint='/projects')
 api.add_resource(projects.Item, '/projects/<id>', endpoint='/projects/<id>')
 
+from resources import datasets
+api.add_resource(datasets.List, '/datasets', endpoint='/datasets')
+api.add_resource(datasets.Item, '/datasets/<id>', endpoint='/datasets/<id>')
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')

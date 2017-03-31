@@ -22,41 +22,7 @@
 </head>
 <body ng-app="autoscienceApp">
 
-  <header class="bg-faded mb-3">
-    <div class="container">
-      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand " href="#">
-          <button class="btn btn-outline-info">autoscience</button>
-        </a>
-        <div class="collapse navbar-collapse" id="navbarToggler">
-          <ul class="navbar-nav mr-auto mt-2 mt-md-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-          </ul>
-          <ul class="navbar-nav mt-2 mt-md-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Signup</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Login</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <header ng-include="'app/components/header/views/header.html'" class="bg-faded mb-3"></header>
 
   <div ng-view></div>
 
@@ -108,6 +74,13 @@
   <script src="app/components/project/config.js"></script>
   <script src="app/components/project/services.js"></script>
   <script src="app/components/project/controllers.js"></script>
+
+  <script src="app/components/dataset/config.js"></script>
+  <script src="app/components/dataset/services.js"></script>
+  <script src="app/components/dataset/controllers.js"></script>
+
+  <!--<script src="app/components/upload/config.js"></script>-->
+  <!--<script src="app/components/upload/controllers.js"></script>-->
 
   <!--<script src="app/controllers/main.js"></script>-->
   <!--<script src="app/controllers/dataset.js"></script>-->

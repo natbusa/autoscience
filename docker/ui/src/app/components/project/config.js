@@ -8,15 +8,23 @@ app.config(function ($routeProvider) {
       templateUrl: 'app/components/project/views/create.html',
       controller: 'ProjectCreateController'
     })
-    .when('/projects/:id', {
+    .when('/projects/:pid', {
       templateUrl: 'app/components/project/views/show.html',
       controller: 'ProjectController'
     })
-    .when('/projects/:id/edit', {
+    .when('/projects/:pid/source/select', {
+      templateUrl: 'app/components/project/views/source.html',
+      controller: 'SourceSelectController'
+    })
+    .when('/projects/:pid/source', {
+      templateUrl: 'app/components/project/views/source.html',
+      controller: 'SourceController'
+    })
+    .when('/projects/:pid/edit', {
       templateUrl: 'app/components/project/views/edit.html',
       controller: 'ProjectController'
     })
-    .when('/projects/:id/settings', {
+    .when('/projects/:pid/settings', {
       templateUrl: 'app/components/project/views/settings.html',
       controller: 'ProjectController'
     });

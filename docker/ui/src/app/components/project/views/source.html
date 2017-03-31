@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2" ng-include="'app/components/project/views/sidebar.html'"></div>
+
+    <div class="col-6 offset-2" ng-show="select">
+      <div class="card">
+        <div class="card-header">
+          Select a dataset
+        </div>
+        <div class="card-block">
+          <form class="form-horizontal" role="form">
+            <div>
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Datasets</th>
+                </tr>
+                </thead>
+                <tr class="border-top-0" ng-repeat="p in datasets.data" ng-click="select_dataset(p)">
+                  <td ng-click="select_dataset(p.id)">
+                    {{p.attributes.title}}<br/>
+                    <small>{{p.attributes.desc}}</small>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
