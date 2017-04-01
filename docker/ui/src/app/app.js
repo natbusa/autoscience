@@ -46,6 +46,11 @@ app.config(function ($routeProvider) {
     });
 });
 
+app.config(['$locationProvider', function($locationProvider) {
+  // use the HTML5 History API
+  $locationProvider.html5Mode(true);
+}]);
+
 app.config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.xsrfCookieName = 'csrf';
   $httpProvider.defaults.xsrfHeaderName = 'X-csrf-token';
