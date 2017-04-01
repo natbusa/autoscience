@@ -17,5 +17,21 @@ footer {
   padding: 3px 1.0 rem
 }
 
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  border-top: solid 2px orange;
+}
+
+.list-group .list-group-item {
+  padding: .5rem 0.75rem;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #464a4c;
+    background-color: transparent;
+    border: 1px solid rgba(0,0,0,.125);
+    border-left: solid 3px orange;
+}
+
 table thead th { border-top: 0px none !important; }
 table tr:first-child td { border-top: 0px none !important; }
