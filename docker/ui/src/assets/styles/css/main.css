@@ -1,13 +1,21 @@
 /* line 1, ../scss/main.scss */
+html {
+  font-size:14px
+}
+
 header {
-  border-bottom: 1px #ddd solid;
+  border-bottom: 2px #ddd solid;
+  font-weight:600;
 }
 
 /* line 5, ../scss/main.scss */
 footer {
-  border-top: 1px #ddd solid;
+  border-top: 2px #ddd solid;
 }
 
+.dropdown-item {
+  padding: 3px 1.0 rem
+}
 
 table thead th { border-top: 0px none !important; }
 table tr:first-child td { border-top: 0px none !important; }
