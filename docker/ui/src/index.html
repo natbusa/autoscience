@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <title>Autoscience</title>
 
+  <!--html5 location rewrite-->
+  <base href="/app/">
+  <meta name="fragment" content="!" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="description" content="Autoscience!">
@@ -18,7 +22,6 @@
 
   <!--application styling-->
   <link rel="stylesheet" href="assets/styles/css/main.css">
-  <base href="/app/">
 
 </head>
 <body ng-app="autoscienceApp">
@@ -27,7 +30,7 @@
 
   <div ng-view></div>
 
-  <footer ng-include="'app/components/header/views/footer.html'"></footer>
+  <footer ng-include="'app/components/footer/views/footer.html'"></footer>
 
   <!--  angular  -->
   <script src="components/angular/angular.js"></script>

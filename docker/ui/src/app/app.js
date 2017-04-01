@@ -49,6 +49,7 @@ app.config(function ($routeProvider) {
 app.config(['$locationProvider', function($locationProvider) {
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
+  $locationProvider.hashPrefix('!');
 }]);
 
 app.config(['$httpProvider', function($httpProvider) {
