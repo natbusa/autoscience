@@ -1,29 +1,48 @@
-# cassandra driver
-from cassandra.cluster import Cluster
-from cassandra.cluster import SimpleStatement, ConsistencyLevel
+import os
+import argparse
 
-cluster = Cluster('cassandra')
-session = cluster.connect()
+from cassandra_client import CassandraClient
+from hdfs_client import HdfsClient
 
-model = {
-  '(intercept)': 48.,
-  'first_feature': 2.,
-  'second_feature': 12.,
-}
+def main():
 
-from hdfs import Config
-client = Config().get_client('dev')
+  #parser
+  parser = argparse.ArgumentParser(description='Copy files from local to hdfs')
+  parser.add_argument('id',  metavar='id', type=str, help='the dataset id')
+  parser.add_argument('fid', metavar='fid', type=str, help='the file id')
 
-# First, we delete any existing `models/` folder on HDFS.
-client.delete('models', recursive=True)
+  args = parser.parse_args()
 
-# We can now upload the data, first as CSV.
-client.makedirs('models/try/now')
+  #connect to cassandra and hdfs
+  c = CassandraClient()
+  h = HdfsClient()
 
-# This is equivalent to the JSON example above.
-from json import dumps
-client.write('model1.json', dumps(model))
+  #very simple security rule:
+  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':args.id, 'to_tb':'files', 'to_id':args.fid}, 1)
+  if not results: return 'not found'
 
-with client.read('model1.json', encoding='utf-8', delimiter='\n') as reader:
-  for line in reader:
-    print(line)
+  #check file status
+  results = c.get('files', ['filename', 'hdfs', 'status'], {'id':args.fid}, 1)
+  if not results: return 'not found'
+
+  # push it to hdfs, if not there yet
+  if results[0]['status']!='local': return 'transfer in progress'
+
+  #todo: check for pid
+  fullpath = os.path.join('/data',args.id,results[0]['filename'])
+  dirname = os.path.dirname(fullpath)
+
+  results = c.get('files', ['status'], {'id':args.fid}, 1)
+  if not results: return
+  if results[0]['status'] != 'local': return
+
+  # We can now upload the data
+  h.client.makedirs(dirname)
+
+  # write file
+  h.client.upload(fullpath, fullpath, overwrite=True)
+
+  #todo: update the record
+
+if __name__ == '__main__':
+  main()

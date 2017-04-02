@@ -75,7 +75,8 @@
           <table class="table table-hover">
             <tr class=" border-top-0" ng-repeat="p in fd.data">
               <td>
-                {{p.attributes.filename}}<br/>
+                <a href="{{p.attributes.url}}">{{p.attributes.filename}}</a><br/>
+                <small>{{p.attributes.id}} | status: {{p.attributes.status}} | hdfs: {{p.attributes.hdfs}}</small>
               </td>
             </tr>
             </tbody>

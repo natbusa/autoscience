@@ -18,6 +18,7 @@ class CassandraClient:
       CREATE TABLE IF NOT EXISTS autoscience.files (
         id        text,
         filename  text,
+        url       text,
         hdfs      text,
         status    text,
         PRIMARY KEY (id)
@@ -27,8 +28,8 @@ class CassandraClient:
 
     cql_stmt = """
       CREATE TABLE IF NOT EXISTS autoscience.counters (
-        id  int,
         k   text,
+        id  text,
         PRIMARY KEY (k)
       );
     """
@@ -40,7 +41,7 @@ class CassandraClient:
         from_id text,
         to_tb   text,
         to_id   text,
-        PRIMARY KEY ((from_tb, from_id), to_tb)
+        PRIMARY KEY ((from_tb, from_id), to_tb, to_id)
       );
     """
     result = self.session.execute(cql_stmt)

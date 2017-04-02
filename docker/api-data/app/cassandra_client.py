@@ -10,28 +10,36 @@ class CassandraClient:
     self.session = self.cluster.connect()
     self.session.row_factory = dict_factory
 
-  def get_id(self,key):
-    cql_stmt = "SELECT id from autoscience.counters where k='{}';".format(key)
-    rows = self.session.execute(cql_stmt)
-    if rows:
-      return rows[0]['id']
-    else:
-      cql_stmt = "INSERT INTO autoscience.counters (id, k) VALUES (-1, '{}') IF NOT EXISTS;".format(key)
-      result = self.session.execute(cql_stmt)
-      return '-1'
-
   def new_id(self,key):
     success = False
+    results = self.get('counters', ['id'], {'k':key}, 1)
 
-    # infinite loop ahead
-    while not success:
-      id = self.get_id(key)
-      new_id = str(int(id)+1)
-      cql_stmt = "UPDATE autoscience.counters SET id = {} WHERE k='{}' IF id = {}".format(new_id, key, id)
-      rows = self.session.execute(cql_stmt)
-      success = rows[0]['[applied]']
-      if success:
-        return new_id
+    #default start
+    new_value='0'
+
+    if results:
+      old_value  = results[0]['id']
+      new_value = str(int(old_value)+1)
+
+      success = self.cas('counters', {'k':key}, 'id', old_value, new_value)
+
+      if not success:
+        raise ValueError("no id generated")
+    else:
+      self.insert('counters', {'k':key, 'id':new_value})
+
+    return new_value
+
+  def cas(self,table, cond, field, old, new):
+    # render query
+    where_array = [ "{}='{}'".format(k, v) if isinstance(v, str) else "{}={}".format(k, v) for k,v in cond.items()]
+    where = ' AND '.join(where_array)
+
+    # the mighty cql query
+    cql_stmt = "UPDATE autoscience.{} SET {} = '{}' WHERE {} IF {} = '{}'".format(table,field, new, where, field, old)
+
+    rows = self.session.execute(cql_stmt)
+    return rows[0]['[applied]']
 
   def insert(self,table, d):
     # which cols?

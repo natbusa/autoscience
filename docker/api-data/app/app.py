@@ -20,7 +20,7 @@ app = Flask(__name__,static_url_path='/files', static_folder='/data')
 app.config['UPLOAD_FOLDER'] = '/data'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 #max 16 MB
 
-def output_jsonapi(data, code, headers=None):
+def output_jsonapi(data, code=200, headers=None):
   resp = make_response(json.dumps(data), code)
   resp.headers.extend(headers or {})
   resp.headers['content-type']='application/vnd.api+json'
@@ -57,12 +57,18 @@ def upload_file(id):
       file.save(fullname)
       stored_files.append(fullname)
 
-      #store record
-      fid = c.new_id("files")
+      #store record: get fresh new id
+      try:
+        fid = c.new_id("files")
+      except ValueError:
+        return 0
+
+      #store record: build the object
       record = {
         'id': fid,
         'filename':filename,
-        'hdfs': '',
+        'url': 'http:/api/data/datasets/{}/files/{}/local'.format(id,fid),
+        'hdfs' : '',
         'status': 'local'
       }
       c.insert("files",record)
@@ -76,29 +82,58 @@ def upload_file(id):
       }
       c.insert("links",record)
 
+    #push it to hdfs, if not there yet
+    subprocess.Popen(
+      ['nohup', 'python', './bg.py', id, fid],
+      stdout=sys.stdout,
+      stderr=sys.stderr,
+      preexec_fn=os.setpgrp)
+
     return str(stored_files)
 
   else: # handle default 'GET'
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], id)
-    items = os.listdir(filepath) if os.path.isdir(filepath) else []
-    data = [ {'attributes': {'filename': v}} for v in items]
-    return json.dumps({'data':data})
+    #very simple security rule:
+    results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files'},100)
 
-@app.route('/datasets/<id>/files/<fid>/raw')
+    data =[]
+    for item in results:
+      rows = c.get('files', ['filename', 'url', 'hdfs', 'status', 'id'], {'id':item['to_id']}, 1)
+      if rows: data.append({'attributes':rows[0]})
+
+    return output_jsonapi({'data':data})
+
+@app.route('/datasets/<id>/files/<fid>/local')
 def serve_rawdata(id, fid):
 
-  #get the linked file id
-  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id}, 1)
+  #very simple security rule:
+  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 1)
+  if not results: return 404
 
-  if not results:
-    return 'not such dataset'
-
-  results = c.get('files', ['filename', 'hdfs', 'status'], {'id':fid}, 1)
+  #check file status
+  results = c.get('files', ['filename', 'url', 'hdfs', 'status'], {'id':fid}, 1)
+  if not results: return 404
 
   if results:
     return redirect(url_for('static', filename='{}/{}'.format(id,results[0]['filename'])))
   else:
-    return []
+    return redirect(url_for('/'))
+
+@app.route('/datasets/<id>/files/<fid>/hdfs')
+def serve_hdfsdata(id, fid):
+
+  #very simple security rule:
+  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 1)
+  if not results: return 404
+
+  #check file status
+  results = c.get('files', ['filename', 'hdfs', 'status'], {'id':fid}, 1)
+  if not results: return 404
+
+  # push it to hdfs, if not there yet
+  if results[0]['status']=='local':
+    subprocess.Popen(['nohup', './bg.py', id, fid], stdout=sys.stdout, stderr=sys.stderr, preexec_fn=os.setpgrp)
+
+  return redirect(url_for('static', filename='{}/{}'.format(id,results[0]['filename'])))
 
 @app.route('/')
 def root_path():
