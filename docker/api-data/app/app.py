@@ -12,8 +12,8 @@ import subprocess
 from cassandra_client import CassandraClient
 from hdfs_client import HdfsClient
 
-c = CassandraClient()
-h = HdfsClient()
+c = CassandraClient('autoscience', 'cassandra')
+h = HdfsClient('hdfs')
 
 app = Flask(__name__,static_url_path='/files', static_folder='/data')
 
@@ -67,7 +67,7 @@ def upload_file(id):
       record = {
         'id': fid,
         'filename':filename,
-        'url': 'http:/api/data/datasets/{}/files/{}/local'.format(id,fid),
+        'url': '/api/data/datasets/{}/files/{}/local'.format(id,fid),
         'hdfs' : '',
         'status': 'local'
       }
@@ -82,22 +82,22 @@ def upload_file(id):
       }
       c.insert("links",record)
 
-    #push it to hdfs, if not there yet
-    subprocess.Popen(
-      ['nohup', 'python', './bg.py', id, fid],
-      stdout=sys.stdout,
-      stderr=sys.stderr,
-      preexec_fn=os.setpgrp)
+      #push it to hdfs, if not there yet
+      subprocess.Popen(
+        ['nohup', 'python', './bg.py', id, fid],
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+        preexec_fn=os.setpgrp)
 
     return str(stored_files)
 
   else: # handle default 'GET'
     #very simple security rule:
-    results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files'},100)
+    results = c.get('links', 100, {'from_tb':'datasets','from_id':id, 'to_tb':'files'}, 'to_id')
 
     data =[]
     for item in results:
-      rows = c.get('files', ['filename', 'url', 'hdfs', 'status', 'id'], {'id':item['to_id']}, 1)
+      rows = c.get('files', 1, {'id':item['to_id']}, 'filename', 'url', 'hdfs', 'status', 'id')
       if rows: data.append({'attributes':rows[0]})
 
     return output_jsonapi({'data':data})
@@ -106,11 +106,11 @@ def upload_file(id):
 def serve_rawdata(id, fid):
 
   #very simple security rule:
-  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 1)
+  results = c.get('links', 1, {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 'to_id')
   if not results: return 404
 
   #check file status
-  results = c.get('files', ['filename', 'url', 'hdfs', 'status'], {'id':fid}, 1)
+  results = c.get('files', 1, {'id':fid}, 'filename', 'url', 'hdfs', 'status')
   if not results: return 404
 
   if results:
@@ -122,11 +122,11 @@ def serve_rawdata(id, fid):
 def serve_hdfsdata(id, fid):
 
   #very simple security rule:
-  results = c.get('links', ['to_id'], {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 1)
+  results = c.get('links', 1, {'from_tb':'datasets','from_id':id, 'to_tb':'files', 'to_id':fid}, 'to_id')
   if not results: return 404
 
   #check file status
-  results = c.get('files', ['filename', 'hdfs', 'status'], {'id':fid}, 1)
+  results = c.get('files', 1, {'id':fid}, 'filename', 'hdfs', 'status')
   if not results: return 404
 
   # push it to hdfs, if not there yet

@@ -1,63 +1,115 @@
 # cassandra driver
+
 from cassandra.cluster import Cluster
 from cassandra.query import dict_factory
-from cassandra.cluster import SimpleStatement, ConsistencyLevel
 
 class CassandraClient:
-  def __init__(self):
+    def __init__(self, keyspace, *seednodes):
 
-    self.cluster = Cluster(['cassandra'])
-    self.session = self.cluster.connect()
-    self.session.row_factory = dict_factory
+        self.cluster = Cluster(seednodes)
+        self.session = self.cluster.connect(keyspace)
+        self.session.row_factory = dict_factory
 
-  def new_id(self,key):
-    success = False
-    results = self.get('counters', ['id'], {'k':key}, 1)
+        self.debug = True
 
-    #default start
-    new_value='0'
+    def debug(self,value):
+        self.debug = value
 
-    if results:
-      old_value  = results[0]['id']
-      new_value = str(int(old_value)+1)
+    def s(self,v):
+      # quote strings, not numbers!
+      return "'{}'".format(v) if isinstance(v, str) else v
 
-      success = self.cas('counters', {'k':key}, 'id', old_value, new_value)
+    def q(self,template, *args):
+        # quote strings, not numbers!
+        a = template.split('{}')
+        q = [isinstance(v, str) for v in args]
 
-      if not success:
-        raise ValueError("no id generated")
-    else:
-      self.insert('counters', {'k':key, 'id':new_value})
+        s = a[0]
+        for i in range(len(q)):
+            s += "'{}'" if q[i] else "{}"
+            s += a[i+1]
 
-    return new_value
+        return s.format(*args)
 
-  def cas(self,table, cond, field, old, new):
-    # render query
-    where_array = [ "{}='{}'".format(k, v) if isinstance(v, str) else "{}={}".format(k, v) for k,v in cond.items()]
-    where = ' AND '.join(where_array)
+    def get(self,table, limit, cond, *columns):
+        # which cols?
+        cols = ', '.join(columns)
 
-    # the mighty cql query
-    cql_stmt = "UPDATE autoscience.{} SET {} = '{}' WHERE {} IF {} = '{}'".format(table,field, new, where, field, old)
+        # render query
+        where_array = [ k + '=' + self.s(v) for k,v in cond.items()]
+        where = ' AND '.join(where_array)
 
-    rows = self.session.execute(cql_stmt)
-    return rows[0]['[applied]']
+        # the mighty cql query
+        cql_stmt = "SELECT {} FROM {} WHERE {} LIMIT {};".format(cols, table, where, limit)
+        if self.debug: print(cql_stmt)
 
-  def insert(self,table, d):
-    # which cols?
-    cols = ', '.join(d.keys())
-    # quote strings, not numbers!
-    vals = ', '.join("'{}'".format(v) if isinstance(v, str) else str(v) for v in d.values())
-    # the mighty cql query
-    cql_stmt = "INSERT INTO autoscience.{} ({}) VALUES ({});".format(table,cols,vals)
-    result = self.session.execute(cql_stmt)
+        # execute
+        resultSet = self.session.execute(cql_stmt)
+        return list(resultSet)
 
-  def get(self,table, lst, cond, limit):
-    # which cols?
-    cols = ', '.join(lst)
+    def insert(self,table, d):
+        # which cols?
+        cols = ', '.join(d.keys())
+        vals = ', '.join(self.s(v) for v in d.values())
 
-    where_array = [ "{}='{}'".format(k, v) if isinstance(v, str) else "{}={}".format(k, v) for k,v in cond.items()]
-    where = ' AND '.join(where_array)
+        # the mighty cql query
+        cql_stmt = "INSERT INTO {} ({}) VALUES ({});".format(table,cols,vals)
+        if self.debug: print(cql_stmt)
 
-    # the mighty cql query
-    cql_stmt = "SELECT {} FROM autoscience.{} WHERE {} LIMIT {};".format(cols, table,where,limit)
-    resultSet = self.session.execute(cql_stmt)
-    return list(resultSet)
+        # execute
+        result = self.session.execute(cql_stmt)
+
+    def modify(self,table, cond, d):
+        # render query
+        where_array = [ k + '=' + self.s(v) for k,v in cond.items()]
+        where = ' AND '.join(where_array)
+
+        # what to set?
+        set_zip = zip(d.keys(), [self.s(v) for v in d.values()])
+        set_list = ['{}={}'.format(k,v) for (k, v) in set_zip]
+        set = ', '.join(set_list)
+
+        # the mighty cql query
+        cql_stmt = "UPDATE {} SET {} WHERE {};".format(table,set,where)
+        if self.debug: print(cql_stmt)
+
+        # execute
+        result = self.session.execute(cql_stmt)
+
+    def cas(self,table, cond, field, old, new):
+        # render query
+        where_array = [ k + '=' + self.s(v) for k,v in cond.items()]
+        where = ' AND '.join(where_array)
+
+        # cas operation in cassandra using paxos
+        cql_stmt = 'UPDATE {} SET {} = '.format(table, field)
+        cql_stmt += self.s(new)
+        cql_stmt += ' WHERE {} IF {} = '.format(where, field)
+        cql_stmt += self.s(old) + ';'
+        if self.debug: print(cql_stmt)
+
+        # execute
+        rows = self.session.execute(cql_stmt)
+        return rows[0]['[applied]']
+
+    def new_id(self,key):
+        #default start
+        new_value='0'
+
+        # get current counter value
+        results = self.get('counters', 1, {'k': key}, 'id')
+
+        if results:
+            old_value    = results[0]['id']
+            new_value = str(int(old_value)+1)
+
+            success = self.cas('counters', {'k':key}, 'id', old_value, new_value)
+
+            if not success:
+                raise ValueError("no id generated")
+        else:
+            self.insert('counters', {'k': key, 'id': new_value})
+
+        return new_value
+
+
