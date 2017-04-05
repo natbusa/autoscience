@@ -95,17 +95,18 @@ app.controller('FileUploadCtrl',function($scope, $routeParams, Source){
             fd.append("file", $scope.files[i]);
         }
 
-        $scope.progressVisible = true;
-
         var xhr = new XMLHttpRequest();
 
         xhr.upload.onprogress = function(evt) {
             if (evt.lengthComputable) {
                 quota = Math.round(evt.loaded * 100 / evt.total);
-                $scope.$apply(function () { $scope.progress = quota; });
+                $scope.$apply(function () {
+                   $scope.progress = quota;
+                   $scope.progressVisible = true;
+                });
                 console.log(quota);
             } else {
-              $scope.progress = 'unable to compute';
+                $scope.progress = 'unable to compute';
             }
         };
 
@@ -122,7 +123,10 @@ app.controller('FileUploadCtrl',function($scope, $routeParams, Source){
         /* This event is raised when the server send back a response */
         alert(evt.target.responseText);
         id = $routeParams.id;
-        $scope.$apply(function () { $scope.fd=Source.query({'id':id}); });
+        $scope.$apply(function () {
+            $scope.fd=Source.query({'id':id});
+            $scope.progressVisible = false;
+        });
     }
 
     function uploadFailed(evt) {
