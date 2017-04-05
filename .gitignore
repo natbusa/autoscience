@@ -9,7 +9,9 @@ tmp
 .idea
 __pycache__
 *.log
+*.out
 .DS_Store
 .ipynb_checkpoints/
 /docker/ui/build/
 /docker/ui/src/components/
+/docker/volumes/
