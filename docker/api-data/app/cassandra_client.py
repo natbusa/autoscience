@@ -1,13 +1,22 @@
 # cassandra driver
+import time
 
-from cassandra.cluster import Cluster
+from cassandra.cluster import Cluster, NoHostAvailable
 from cassandra.query import dict_factory
 
 class CassandraClient:
     def __init__(self, keyspace, *seednodes):
 
+while True:
+    try:
         self.cluster = Cluster(seednodes)
         self.session = self.cluster.connect(keyspace)
+        break
+    except NoHostAvailable:
+        print("Waiting ... connecting to cassandra")
+        time.sleep(1)
+
+
         self.session.row_factory = dict_factory
 
         self.debug = True
