@@ -40,5 +40,12 @@ from resources import datasets
 api.add_resource(datasets.List, '/datasets', endpoint='/datasets')
 api.add_resource(datasets.Item, '/datasets/<id>', endpoint='/datasets/<id>')
 
+from resources import links
+api.add_resource(links.List, '/links', endpoint='/links')
+api.add_resource(links.List, '/links/<from_type>', endpoint='/links/<from_type>')
+api.add_resource(links.List, '/links/<from_type>/<from_id>', endpoint='/links/<from_type>/<from_id>')
+api.add_resource(links.List, '/links/<from_type>/<from_id>/<to_type>', endpoint='/links/<from_type>/<from_id>/<to_type>')
+api.add_resource(links.Item, '/links/<from_type>/<from_id>/<to_type>/<to_id>', endpoint='/links/<from_type>/<from_id>/<to_type>/<to_id>')
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')

@@ -33,7 +33,7 @@ def jsonapi_item(id):
   return {'id': id, 'type': 'projects', 'attributes': DATABASE[id]}
 
 def jsonapi_list(filter=''):
-  items = [  jsonapi_item(k) for k in DATABASE.keys() ]
+  items = [jsonapi_item(k) for k in DATABASE.keys()]
   return items
 
 def jsonapi(id=None, code=200):
@@ -61,6 +61,7 @@ class Item(Resource):
     return '', 204
 
   def put(self, id):
+    #create put, not allowed
     abort_if_project_doesnt_exist(id)
 
     # build object
