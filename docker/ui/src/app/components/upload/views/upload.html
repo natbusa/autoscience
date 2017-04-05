@@ -1,6 +1,9 @@
 <div class="container">
+
   <div class="row">
-    <div class="offset-3 col-9">
+    <div class="col-2" ng-include="'app/components/dataset/views/sidebar.html'"></div>
+
+    <div class="col-10" ng-controller="FileUploadCtrl">
 
       <div class="input-group">
         <label class="custom-file mr-3 w-100">
@@ -14,20 +17,10 @@
         <button class="btn btn-success" type="button" ng-click="uploadFile()">Upload!</button>
       </div>
 
-      <!--<div ng-show="files.length">-->
-        <!--<div ng-repeat="file in files.slice(0)">-->
-          <!--<span>{{file.webkitRelativePath || file.name}}</span>-->
-          <!--(<span ng-switch="file.size > 1024*1024">-->
-                  <!--<span ng-switch-when="true">{{file.size / 1024 / 1024 | number:2}} MB</span>-->
-                  <!--<span ng-switch-default>{{file.size / 1024 | number:2}} kB</span>-->
-           <!--</span>)-->
-        <!--</div>-->
-      <!--</div>-->
-
       <div ng-show="progressVisible">
         <div class="progress">
           <div class="progress-bar" role="progressbar" style="width: {{progress}}%;"
-               aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">{{progress}}%
+               aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">{{file.name}}: {{progress}}%
           </div>
         </div>
       </div>

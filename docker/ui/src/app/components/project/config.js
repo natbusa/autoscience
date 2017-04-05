@@ -12,13 +12,13 @@ app.config(function ($routeProvider) {
       templateUrl: 'app/components/project/views/show.html',
       controller: 'ProjectController'
     })
-    .when('/projects/:pid/source/select', {
-      templateUrl: 'app/components/project/views/source.html',
-      controller: 'SourceSelectController'
-    })
     .when('/projects/:pid/source', {
       templateUrl: 'app/components/project/views/source.html',
       controller: 'SourceController'
+    })
+    .when('/projects/:pid/source/setup', {
+      templateUrl: 'app/components/project/views/source_setup.html',
+      controller: 'SourceSetupController'
     })
     .when('/projects/:pid/edit', {
       templateUrl: 'app/components/project/views/edit.html',
