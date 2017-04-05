@@ -56,8 +56,8 @@ services:
       - 8888:8888
 
   spark-master:
-    image: gettyimages/spark
-    command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
+    image: jupyter/pyspark-notebook
+    command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
     container_name: spark-master
     hostname: spark-master
     environment:
@@ -80,8 +80,8 @@ services:
       - ./volumes/spark/master/data:/tmp/data
 
   spark-worker:
-    image: gettyimages/spark
-    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    image: jupyter/pyspark-notebook
+    command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark-worker
     hostname: spark-worker
     environment:
@@ -101,6 +101,7 @@ services:
     volumes:
       - ./spark/conf/worker:/conf
       - ./volumes/spark/worker/data:/tmp/data
+      - ./volumes/spark/worker/work:/usr/local/spark/work
 
   hdfs-nn:
     image: itrust/hdfs:2.7.1
